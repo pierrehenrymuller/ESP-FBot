@@ -1,0 +1,60 @@
+import esphome.codegen as cg
+import esphome.config_validation as cv
+from esphome.components import binary_sensor
+from esphome.const import CONF_ID, DEVICE_CLASS_CONNECTIVITY
+from . import fossibot_ns, Fossibot, CONF_FOSSIBOT_ID
+
+DEPENDENCIES = ["fossibot"]
+
+CONF_CONNECTED = "connected"
+CONF_USB_ACTIVE = "usb_active"
+CONF_DC_ACTIVE = "dc_active"
+CONF_AC_ACTIVE = "ac_active"
+CONF_LIGHT_ACTIVE = "light_active"
+
+DEVICE_CLASS_OUTLET = "plug"
+DEVICE_CLASS_LIGHT = "light"
+
+CONFIG_SCHEMA = cv.Schema(
+    {
+        cv.GenerateID(CONF_FOSSIBOT_ID): cv.use_id(Fossibot),
+        cv.Optional(CONF_CONNECTED): binary_sensor.binary_sensor_schema(
+            device_class=DEVICE_CLASS_CONNECTIVITY,
+        ),
+        cv.Optional(CONF_USB_ACTIVE): binary_sensor.binary_sensor_schema(
+            device_class=DEVICE_CLASS_OUTLET,
+        ),
+        cv.Optional(CONF_DC_ACTIVE): binary_sensor.binary_sensor_schema(
+            device_class=DEVICE_CLASS_OUTLET,
+        ),
+        cv.Optional(CONF_AC_ACTIVE): binary_sensor.binary_sensor_schema(
+            device_class=DEVICE_CLASS_OUTLET,
+        ),
+        cv.Optional(CONF_LIGHT_ACTIVE): binary_sensor.binary_sensor_schema(
+            device_class=DEVICE_CLASS_LIGHT,
+        ),
+    }
+)
+
+async def to_code(config):
+    parent = await cg.get_variable(config[CONF_FOSSIBOT_ID])
+    
+    if CONF_CONNECTED in config:
+        sens = await binary_sensor.new_binary_sensor(config[CONF_CONNECTED])
+        cg.add(parent.set_connected_binary_sensor(sens))
+    
+    if CONF_USB_ACTIVE in config:
+        sens = await binary_sensor.new_binary_sensor(config[CONF_USB_ACTIVE])
+        cg.add(parent.set_usb_active_binary_sensor(sens))
+    
+    if CONF_DC_ACTIVE in config:
+        sens = await binary_sensor.new_binary_sensor(config[CONF_DC_ACTIVE])
+        cg.add(parent.set_dc_active_binary_sensor(sens))
+    
+    if CONF_AC_ACTIVE in config:
+        sens = await binary_sensor.new_binary_sensor(config[CONF_AC_ACTIVE])
+        cg.add(parent.set_ac_active_binary_sensor(sens))
+    
+    if CONF_LIGHT_ACTIVE in config:
+        sens = await binary_sensor.new_binary_sensor(config[CONF_LIGHT_ACTIVE])
+        cg.add(parent.set_light_active_binary_sensor(sens))
