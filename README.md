@@ -1,8 +1,17 @@
-# Fossibot Battery ESP-Home Component
+# ESP-Home FBot Battery Component
 
 ** THIS IS DEVELOPMENT CODE, NOT TESTED YET ***
 
-ESP-Home custom component for monitoring and controlling Fossibot large battery systems via Bluetooth Low Energy (BLE).
+This is a HomeAssistant, ESP-Home custom component for locally monitoring and controlling battery systems via Bluetooth. Should work with the following batteries:
+
+ - [FOSSiBOT F3600 Pro Portable Power Station](https://www.fossibot.com/products/fossibot-f3600-pro)
+ - [FOSSiBOT F2400 Portable Power Station](https://www.fossibot.com/products/fossibot-f2400)
+ - [SYDPOWER N052](https://www.sydpower.com/product/n052?id=665461cb8b0da4a4e43e4609)
+ - [SYDPOWER N066](https://www.sydpower.com/product/detail?id=665462e4a7c432936b1b583d)
+ - [AFERIY P210](https://www.aferiy.com/products/aferiy-p210-portable-power-station-2400w-2048wh)
+ - [AFERIY P310](https://www.aferiy.com/products/aferiy-p310-portable-power-station-3300w-3840wh)
+ 
+Basically, any power station that works with the "BrightEMS" application. You normally connect these batteries to your WIFI and they will connect to a cloud server. You then have to manage the device from the cloud this can be slow and not ideal in outage situations. Instead, you can get fast local management of your battery by loading this ESP-Home component on a small device near the battery. The device will communicate to the battery using Bluetooth and relay the data locally using WIFI.
 
 ## Features
 
@@ -14,15 +23,15 @@ ESP-Home custom component for monitoring and controlling Fossibot large battery 
 
 ## Hardware Requirements
 
-- ESP32 board (ESP32-WROOM, ESP32-DevKit, etc.)
-- Fossibot battery with BLE (device name starts with "POWER" or "Fossibot")
-- The ESP32 should be within BLE range of the battery (typically 10-30 feet)
+- I suggest the [M5Stack ATOM Light](https://shop.m5stack.com/products/atom-lite-esp32-development-kit) or the [M5StickC PLUS2 ESP32 Mini](https://shop.m5stack.com/products/m5stickc-plus2-esp32-mini-iot-development-kit) device, but many ESP32 (ESP32-WROOM, ESP32-DevKit, etc.) will do.
+- A compatible battery that makes use of the "BrightEMS" application. You do not need to pair the battery to WIFI.
+- The ESP32 device will need to be within range of the battery (typically 10-30 feet)
 
 ## Installation
 
-1. Use the example configuration file `fossibot-example.yaml` as a starting point
-2. Update WiFi credentials and API encryption key
-3. Flash to your ESP32 device
+1. Use the example configuration file `fossibot-example.yaml` as a starting point.
+2. Update WiFi credentials and API encryption key.
+3. Flash to your ESP32 device.
 
 ## Configuration
 
