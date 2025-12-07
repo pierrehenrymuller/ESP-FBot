@@ -138,3 +138,14 @@ As an alternative to showing the state of charge, in this example we are going t
 ```
 
 There is also a [full example configuration of this here](https://github.com/Ylianst/ESP-FBot/blob/main/docs/example-m5atom-light-switch.yaml). You can combine this with the use of the button above to toggle the AC inverter. You can also change this code a bit to show the state of the other switches if you like.
+
+## Full Configuration
+
+Since I have a M5 ATOM Light, here is the [configuration I use](https://github.com/Ylianst/ESP-FBot/blob/main/docs/example-m5atom-full.yaml).
+
+- The button with toggle the light on the battery.
+- The RGB light will be white if it can't connect to the battery.
+- The RGB light will be off normally, but on when the AC inverter is active.
+- When the AC inverter is active, the color of the light will show state of change (Green over 30%, Yellow over 15%, Red at 15% or under).
+
+This seems a resonable configuration and you it's pretty easy to change it as you want.
