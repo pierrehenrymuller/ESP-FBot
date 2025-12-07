@@ -23,7 +23,7 @@ binary_sensor:
 
 Instead of `light_switch` the other possible values are `switch.toggle` are `usb_switch`, `dc_switch` and `ac_switch`.
 
-Nice way to control your battery from a short distance.
+Nice way to control your battery from a short distance. See a [full example configuration of this here](https://github.com/Ylianst/ESP-FBot/blob/main/docs/example-m5atom-button.yaml).
 
 ## Light Configuration
 
@@ -112,4 +112,4 @@ binary_sensor:
                 - light.turn_off: status_led
 ```
 
-This way, if the ATOM light disconnects from the battery, the light will turn off.
+This way, if the ATOM light disconnects from the battery, the light will turn off. See a [full example configuration of this here](https://github.com/Ylianst/ESP-FBot/blob/main/docs/example-m5atom-light-soc.yaml).
