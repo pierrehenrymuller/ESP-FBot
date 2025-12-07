@@ -11,7 +11,7 @@ This is a HomeAssistant, ESP-Home custom component for locally monitoring and co
  - [AFERIY P210](https://www.aferiy.com/products/aferiy-p210-portable-power-station-2400w-2048wh)
  - [AFERIY P310](https://www.aferiy.com/products/aferiy-p310-portable-power-station-3300w-3840wh)
  
-Basically, any power station that works with the "BrightEMS" application. You normally connect these batteries to your WIFI and they will connect to a cloud server. You then have to manage the device from the cloud this can be slow and not ideal in outage situations. Instead, you can get fast local management of your battery by loading this ESP-Home component on a small device near the battery. The device will communicate to the battery using Bluetooth and relay the data locally using WIFI.
+Basically, any power station that works with the "BrightEMS" application. You normally manage these batteries thru a cloud service, which is not ideal in outage situations. Instead, you can get fast local management by loading this ESP-Home component on a small device near the battery. The device will communicate to the battery using Bluetooth and relay the data locally using WIFI to Home Assistant.
 
 ## Features
 
