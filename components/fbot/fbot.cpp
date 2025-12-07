@@ -22,9 +22,6 @@ void Fbot::setup() {
   if (this->connected_binary_sensor_ != nullptr) {
     this->connected_binary_sensor_->publish_state(false);
   }
-  
-  // Initialize switches as unavailable since we start disconnected
-  this->update_switches_availability(false);
 }
 
 void Fbot::loop() {
@@ -316,8 +313,6 @@ void Fbot::update_connected_state(bool state) {
   if (this->connected_binary_sensor_ != nullptr) {
     this->connected_binary_sensor_->publish_state(state);
   }
-  // Update switch availability based on connection state
-  this->update_switches_availability(state);
 }
 
 // Control methods
@@ -410,46 +405,6 @@ void Fbot::reset_sensors_to_unknown() {
   if (this->light_active_binary_sensor_ != nullptr) {
     this->light_active_binary_sensor_->publish_state(false);
   }
-}
-
-void Fbot::update_switches_availability(bool available) {
-  ESP_LOGI(TAG, "update_switches_availability called with: %s", available ? "available" : "unavailable");
-  
-  // Update availability for all switches using internal state
-  if (this->usb_switch_ != nullptr) {
-    ESP_LOGD(TAG, "Setting USB switch to %s", available ? "available" : "unavailable");
-    if (available) {
-      this->usb_switch_->set_internal(false);
-    } else {
-      this->usb_switch_->set_internal(true);
-    }
-  }
-  if (this->dc_switch_ != nullptr) {
-    ESP_LOGD(TAG, "Setting DC switch to %s", available ? "available" : "unavailable");
-    if (available) {
-      this->dc_switch_->set_internal(false);
-    } else {
-      this->dc_switch_->set_internal(true);
-    }
-  }
-  if (this->ac_switch_ != nullptr) {
-    ESP_LOGD(TAG, "Setting AC switch to %s", available ? "available" : "unavailable");
-    if (available) {
-      this->ac_switch_->set_internal(false);
-    } else {
-      this->ac_switch_->set_internal(true);
-    }
-  }
-  if (this->light_switch_ != nullptr) {
-    ESP_LOGD(TAG, "Setting Light switch to %s", available ? "available" : "unavailable");
-    if (available) {
-      this->light_switch_->set_internal(false);
-    } else {
-      this->light_switch_->set_internal(true);
-    }
-  }
-  
-  ESP_LOGI(TAG, "Switches availability updated: %s", available ? "available" : "unavailable");
 }
 
 }  // namespace fbot
