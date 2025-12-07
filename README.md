@@ -1,4 +1,4 @@
-# ESP-Home Battery Component for FOSSiBOT, SYDPOWER and AFERIY Batteries
+# ESP-Home Local Battery Interfaace
 
 ![ESP-FBot Image](https://raw.githubusercontent.com/Ylianst/ESP-FBot/refs/heads/main/docs/images/main.png)
 
