@@ -88,9 +88,6 @@ sensor:
     total_power:
       name: "${friendly_name} Total Power"
       id: total_watts
-    remaining_kwh:
-      name: "${friendly_name} Remaining Capacity"
-      id: remaining_kwh
     remaining_time:
       name: "${friendly_name} Remaining Time"
       id: remaining_minutes

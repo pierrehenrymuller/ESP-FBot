@@ -22,7 +22,6 @@ CONF_INPUT_POWER = "input_power"
 CONF_OUTPUT_POWER = "output_power"
 CONF_SYSTEM_POWER = "system_power"
 CONF_TOTAL_POWER = "total_power"
-CONF_REMAINING_KWH = "remaining_kwh"
 CONF_REMAINING_TIME = "remaining_time"
 
 CONFIG_SCHEMA = cv.Schema(
@@ -58,12 +57,6 @@ CONFIG_SCHEMA = cv.Schema(
             device_class=DEVICE_CLASS_POWER,
             state_class=STATE_CLASS_MEASUREMENT,
         ),
-        cv.Optional(CONF_REMAINING_KWH): sensor.sensor_schema(
-            unit_of_measurement=UNIT_KILOWATT_HOURS,
-            accuracy_decimals=3,
-            device_class=DEVICE_CLASS_ENERGY,
-            state_class=STATE_CLASS_MEASUREMENT,
-        ),
         cv.Optional(CONF_REMAINING_TIME): sensor.sensor_schema(
             unit_of_measurement=UNIT_MINUTE,
             accuracy_decimals=0,
@@ -95,10 +88,6 @@ async def to_code(config):
     if CONF_TOTAL_POWER in config:
         sens = await sensor.new_sensor(config[CONF_TOTAL_POWER])
         cg.add(parent.set_total_power_sensor(sens))
-    
-    if CONF_REMAINING_KWH in config:
-        sens = await sensor.new_sensor(config[CONF_REMAINING_KWH])
-        cg.add(parent.set_remaining_kwh_sensor(sens))
     
     if CONF_REMAINING_TIME in config:
         sens = await sensor.new_sensor(config[CONF_REMAINING_TIME])

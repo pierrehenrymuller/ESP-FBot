@@ -53,8 +53,6 @@ sensor:
       name: "System Power"
     total_power:
       name: "Total Power"
-    remaining_kwh:
-      name: "Remaining Capacity"
     remaining_time:
       name: "Remaining Time"
 ```

@@ -36,7 +36,6 @@ void Fbot::dump_config() {
   LOG_SENSOR("  ", "Output Power", this->output_power_sensor_);
   LOG_SENSOR("  ", "System Power", this->system_power_sensor_);
   LOG_SENSOR("  ", "Total Power", this->total_power_sensor_);
-  LOG_SENSOR("  ", "Remaining kWh", this->remaining_kwh_sensor_);
   LOG_SENSOR("  ", "Remaining Time", this->remaining_time_sensor_);
   LOG_BINARY_SENSOR("  ", "Connected", this->connected_binary_sensor_);
   LOG_BINARY_SENSOR("  ", "USB Active", this->usb_active_binary_sensor_);
@@ -235,9 +234,6 @@ void Fbot::parse_notification(const uint8_t *data, uint16_t length) {
   uint16_t remaining_minutes = this->get_register(data, length, 59);
   uint16_t state_flags = this->get_register(data, length, 41);
   
-  // Calculate remaining kWh (battery capacity is 2.048kWh)
-  float remaining_kwh = (battery_percent / 100.0f) * 2.048f;
-  
   // Publish sensor values
   if (this->battery_percent_sensor_ != nullptr) {
     this->battery_percent_sensor_->publish_state(battery_percent);
@@ -253,9 +249,6 @@ void Fbot::parse_notification(const uint8_t *data, uint16_t length) {
   }
   if (this->total_power_sensor_ != nullptr) {
     this->total_power_sensor_->publish_state(total_watts);
-  }
-  if (this->remaining_kwh_sensor_ != nullptr) {
-    this->remaining_kwh_sensor_->publish_state(remaining_kwh);
   }
   if (this->remaining_time_sensor_ != nullptr) {
     this->remaining_time_sensor_->publish_state(remaining_minutes);
