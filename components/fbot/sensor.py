@@ -23,11 +23,25 @@ CONF_OUTPUT_POWER = "output_power"
 CONF_SYSTEM_POWER = "system_power"
 CONF_TOTAL_POWER = "total_power"
 CONF_REMAINING_TIME = "remaining_time"
+CONF_BATTERY_S1_LEVEL = "battery_s1_level"
+CONF_BATTERY_S2_LEVEL = "battery_s2_level"
 
 CONFIG_SCHEMA = cv.Schema(
     {
         cv.GenerateID(CONF_FBOT_ID): cv.use_id(Fbot),
         cv.Optional(CONF_BATTERY_LEVEL): sensor.sensor_schema(
+            unit_of_measurement=UNIT_PERCENT,
+            accuracy_decimals=1,
+            device_class=DEVICE_CLASS_BATTERY,
+            state_class=STATE_CLASS_MEASUREMENT,
+        ),
+        cv.Optional(CONF_BATTERY_S1_LEVEL): sensor.sensor_schema(
+            unit_of_measurement=UNIT_PERCENT,
+            accuracy_decimals=1,
+            device_class=DEVICE_CLASS_BATTERY,
+            state_class=STATE_CLASS_MEASUREMENT,
+        ),
+        cv.Optional(CONF_BATTERY_S2_LEVEL): sensor.sensor_schema(
             unit_of_measurement=UNIT_PERCENT,
             accuracy_decimals=1,
             device_class=DEVICE_CLASS_BATTERY,
@@ -72,6 +86,14 @@ async def to_code(config):
     if CONF_BATTERY_LEVEL in config:
         sens = await sensor.new_sensor(config[CONF_BATTERY_LEVEL])
         cg.add(parent.set_battery_percent_sensor(sens))
+
+    if CONF_BATTERY_S1_LEVEL in config:
+        sens = await sensor.new_sensor(config[CONF_BATTERY_S1_LEVEL])
+        cg.add(parent.set_battery_percent_s1_sensor(sens))
+
+    if CONF_BATTERY_S2_LEVEL in config:
+        sens = await sensor.new_sensor(config[CONF_BATTERY_S2_LEVEL])
+        cg.add(parent.set_battery_percent_s2_sensor(sens))
     
     if CONF_INPUT_POWER in config:
         sens = await sensor.new_sensor(config[CONF_INPUT_POWER])

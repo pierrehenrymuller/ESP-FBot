@@ -43,6 +43,8 @@ void Fbot::dump_config() {
   ESP_LOGCONFIG(TAG, "Fbot Battery:");
   ESP_LOGCONFIG(TAG, "  Polling interval: %ums", this->polling_interval_);
   LOG_SENSOR("  ", "Battery Percent", this->battery_percent_sensor_);
+  LOG_SENSOR("  ", "Battery S1 Percent", this->battery_percent_s1_sensor_);
+  LOG_SENSOR("  ", "Battery S2 Percent", this->battery_percent_s2_sensor_);
   LOG_SENSOR("  ", "Input Power", this->input_power_sensor_);
   LOG_SENSOR("  ", "Output Power", this->output_power_sensor_);
   LOG_SENSOR("  ", "System Power", this->system_power_sensor_);
@@ -245,6 +247,9 @@ void Fbot::parse_notification(const uint8_t *data, uint16_t length) {
   
   // Parse key registers
   float battery_percent = this->get_register(data, length, 56) / 10.0f;
+  // Slave batteries (S1 / S2) ranges are 1 to 101, 0 means disconnected. Adding -1 to get proper range.
+  float battery_percent_s1 = this->get_register(data, length, 53) / 10.0f - 1.0f;
+  float battery_percent_s2 = this->get_register(data, length, 55) / 10.0f - 1.0f;
   uint16_t input_watts = this->get_register(data, length, 3);
   uint16_t output_watts = this->get_register(data, length, 39);
   uint16_t system_watts = this->get_register(data, length, 21);
@@ -256,6 +261,12 @@ void Fbot::parse_notification(const uint8_t *data, uint16_t length) {
   if (this->battery_percent_sensor_ != nullptr) {
     this->battery_percent_sensor_->publish_state(battery_percent);
   }
+  if (this->battery_percent_s1_sensor_ != nullptr) {
+    this->battery_percent_s1_sensor_->publish_state(battery_percent_s1);
+  }
+  if (this->battery_percent_s2_sensor_ != nullptr) {
+    this->battery_percent_s2_sensor_->publish_state(battery_percent_s2);
+  }  
   if (this->input_power_sensor_ != nullptr) {
     this->input_power_sensor_->publish_state(input_watts);
   }
@@ -305,8 +316,8 @@ void Fbot::parse_notification(const uint8_t *data, uint16_t length) {
     this->light_switch_->publish_state(light_state);
   }
   
-  ESP_LOGD(TAG, "Battery: %.1f%%, Input: %dW, Output: %dW, USB: %d, DC: %d, AC: %d", 
-           battery_percent, input_watts, output_watts, usb_state, dc_state, ac_state);
+  ESP_LOGD(TAG, "Battery: %.1f%% %.1f%% %.1f%%, Input: %dW, Output: %dW, USB: %d, DC: %d, AC: %d", 
+           battery_percent, battery_percent_s1, battery_percent_s2, input_watts, output_watts, usb_state, dc_state, ac_state);
 }
 
 void Fbot::update_connected_state(bool state) {
@@ -376,6 +387,12 @@ void Fbot::reset_sensors_to_unknown() {
   // Reset all sensor values to unknown/unavailable
   if (this->battery_percent_sensor_ != nullptr) {
     this->battery_percent_sensor_->publish_state(NAN);
+  }
+  if (this->battery_percent_s1_sensor_ != nullptr) {
+    this->battery_percent_s1_sensor_->publish_state(NAN);
+  }
+  if (this->battery_percent_s2_sensor_ != nullptr) {
+    this->battery_percent_s2_sensor_->publish_state(NAN);
   }
   if (this->input_power_sensor_ != nullptr) {
     this->input_power_sensor_->publish_state(NAN);
