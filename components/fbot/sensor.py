@@ -4,8 +4,6 @@ from esphome.components import sensor
 from esphome.const import (
     CONF_ID,
     CONF_BATTERY_LEVEL,
-    CONF_BATTERY_S1_LEVEL,
-    CONF_BATTERY_S2_LEVEL,
     DEVICE_CLASS_BATTERY,
     DEVICE_CLASS_POWER,
     DEVICE_CLASS_ENERGY,
@@ -25,6 +23,8 @@ CONF_OUTPUT_POWER = "output_power"
 CONF_SYSTEM_POWER = "system_power"
 CONF_TOTAL_POWER = "total_power"
 CONF_REMAINING_TIME = "remaining_time"
+CONF_BATTERY_S1_LEVEL = "battery_s1_level"
+CONF_BATTERY_S2_LEVEL = "battery_s2_level"
 
 CONFIG_SCHEMA = cv.Schema(
     {
