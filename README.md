@@ -115,11 +115,11 @@ sensor:
       id: battery_percent
     # Optional sensors if you have extra batteries 1 & 2
     battery_s1_level:
-      name: "Battery Extra 1"
-      id: battery_s1_percent
+      name: "Battery"
+      id: battery_percent_s1
     battery_s2_level:
-      name: "Battery Extra 2"
-      id: battery_s2_percent
+      name: "Battery"
+      id: battery_percent_s2
     input_power:
       name: "Input Power"
       id: input_watts

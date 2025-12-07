@@ -76,6 +76,12 @@ sensor:
     battery_level:
       name: "${friendly_name} Battery"
       id: battery_percent
+    battery_s1_level:
+      name: "${friendly_name} Battery"
+      id: battery_percent_s1
+    battery_s2_level:
+      name: "${friendly_name} Battery"
+      id: battery_percent_s2
     input_power:
       name: "${friendly_name} Input Power"
       id: input_watts
