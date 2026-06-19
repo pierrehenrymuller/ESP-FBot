@@ -136,6 +136,7 @@ class Fbot : public esphome::ble_client::BLEClientNode, public Component {
 #ifdef USE_NUMBER
   // Number setters
   void set_threshold_charge_number(number::Number *num) { this->threshold_charge_number_ = num; }
+  void set_max_charging_current_number(number::Number *num) { this->max_charging_current_number_ = num; }
   void set_threshold_discharge_number(number::Number *num) { this->threshold_discharge_number_ = num; }
 #endif
   
@@ -153,6 +154,7 @@ class Fbot : public esphome::ble_client::BLEClientNode, public Component {
 
   // Control methods for thresholds
   void set_threshold_charge(float percent);
+  void set_max_charging_current(float amperes);
   void set_threshold_discharge(float percent);
   
   // WiFi configuration method
@@ -230,6 +232,7 @@ class Fbot : public esphome::ble_client::BLEClientNode, public Component {
   // Numbers
   number::Number *threshold_charge_number_{nullptr};
   number::Number *threshold_discharge_number_{nullptr};
+  number::Number *max_charging_current_number_{nullptr};
 #endif
   
 #ifdef USE_SELECT

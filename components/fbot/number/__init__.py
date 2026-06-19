@@ -8,6 +8,7 @@ from esphome.const import (
     CONF_MAX_VALUE,
     CONF_STEP,
     UNIT_PERCENT,
+    UNIT_AMPERE,
 )
 from .. import fbot_ns, Fbot, CONF_FBOT_ID
 
@@ -15,12 +16,14 @@ DEPENDENCIES = ["fbot"]
 
 CONF_THRESHOLD_CHARGE = "threshold_charge"
 CONF_THRESHOLD_DISCHARGE = "threshold_discharge"
+CONF_MAX_CHARGING_CURRENT = "max_charging_current"
 
 FbotNumber = fbot_ns.class_("FbotNumber", number.Number, cg.Component)
 
 NUMBER_TYPES = {
     CONF_THRESHOLD_CHARGE: "threshold_charge",
     CONF_THRESHOLD_DISCHARGE: "threshold_discharge",
+    CONF_MAX_CHARGING_CURRENT: "max_charging_current",
 }
 
 CONFIG_SCHEMA = cv.Schema(
@@ -48,6 +51,20 @@ CONFIG_SCHEMA = cv.Schema(
                 cv.Optional(CONF_STEP, default=1): cv.float_,
             }
         ),
+        # AC max charging current (SETTINGS register 20), in amperes. Firmware
+        # accepts 1-20 A; the device caps actual power at its AC charge maximum.
+        # Lower values throttle charge below the coarse 5-level enum (register 13).
+        cv.Optional(CONF_MAX_CHARGING_CURRENT): number.number_schema(
+            FbotNumber,
+            icon="mdi:current-ac",
+            unit_of_measurement=UNIT_AMPERE,
+        ).extend(
+            {
+                cv.Optional(CONF_MIN_VALUE, default=1): cv.float_,
+                cv.Optional(CONF_MAX_VALUE, default=20): cv.float_,
+                cv.Optional(CONF_STEP, default=1): cv.float_,
+            }
+        ),
     }
 )
 
@@ -71,3 +88,5 @@ async def to_code(config):
                 cg.add(parent.set_threshold_charge_number(var))
             elif key == CONF_THRESHOLD_DISCHARGE:
                 cg.add(parent.set_threshold_discharge_number(var))
+            elif key == CONF_MAX_CHARGING_CURRENT:
+                cg.add(parent.set_max_charging_current_number(var))

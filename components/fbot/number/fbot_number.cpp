@@ -35,6 +35,8 @@ void FbotNumber::control(float value) {
     this->parent_->set_threshold_charge(value);
   } else if (this->number_type_ == "threshold_discharge") {
     this->parent_->set_threshold_discharge(value);
+  } else if (this->number_type_ == "max_charging_current") {
+    this->parent_->set_max_charging_current(value);
   } else {
     ESP_LOGW(TAG, "Unknown number type: %s", this->number_type_.c_str());
     return;

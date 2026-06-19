@@ -541,14 +541,17 @@ void Fbot::parse_settings_notification(const uint8_t *data, uint16_t length) {
     this->threshold_charge_sensor_->publish_state(threshold_charge);
   }
 
-  // SETTINGS bank register 20: AC max charging current (amperes). Read-only for
-  // now (verification). Raw value, no scaling (1-20 A per reverse engineering).
+  // SETTINGS bank register 20: AC max charging current (amperes, 1-20).
   uint16_t max_charging_current = this->get_register(data, length, REG_MAX_CHARGING_CURRENT);
   if (this->max_charging_current_sensor_ != nullptr) {
     this->max_charging_current_sensor_->publish_state(max_charging_current);
   }
 
 #ifdef USE_NUMBER
+  // Publish max charging current readback (user-adjustable control).
+  if (this->max_charging_current_number_ != nullptr) {
+    this->max_charging_current_number_->publish_state(max_charging_current);
+  }
   // Publish threshold number values (user-adjustable controls)
   if (this->threshold_discharge_number_ != nullptr) {
     this->threshold_discharge_number_->publish_state(threshold_discharge);
@@ -676,6 +679,16 @@ void Fbot::set_threshold_charge(float percent) {
   if (value < 100) { value = 100; }  // Minimum 100
   if (value > 1000) { value = 1000; }  // Maximum 1000
   this->send_control_command(REG_THRESHOLD_CHARGE, value);
+}
+
+void Fbot::set_max_charging_current(float amperes) {
+  // SETTINGS register 20, raw amperes. Clamp HARD to 1-20: an out-of-range
+  // setting written over BLE can put the unit in a boot loop, so never send a
+  // value outside the firmware-accepted window.
+  uint16_t value = static_cast<uint16_t>(amperes);
+  if (value < 1) { value = 1; }
+  if (value > 20) { value = 20; }
+  this->send_control_command(REG_MAX_CHARGING_CURRENT, value);
 }
 
 void Fbot::set_threshold_discharge(float percent) {
