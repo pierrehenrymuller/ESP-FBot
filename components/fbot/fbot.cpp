@@ -475,7 +475,18 @@ void Fbot::parse_notification(const uint8_t *data, uint16_t length) {
 void Fbot::parse_settings_notification(const uint8_t *data, uint16_t length) {
   // Parse holding registers (settings) from 0x1103 response
   ESP_LOGD(TAG, "Received settings notification");
-  
+
+  // TEMP DEBUG (register scan): dump all 80 SETTINGS registers to find which one
+  // encodes the AC charge level on the P280. Remove after the scan.
+  for (uint8_t base = 0; base < 80; base += 16) {
+    char buf[200];
+    int n = 0;
+    for (uint8_t i = base; i < base + 16 && i < 80; i++) {
+      n += snprintf(buf + n, sizeof(buf) - n, "%u=%u ", i, this->get_register(data, length, i));
+    }
+    ESP_LOGI(TAG, "SETTINGS %s", buf);
+  }
+
   // Mark that we've received settings at least once
   if (!this->settings_received_) {
     this->settings_received_ = true;
