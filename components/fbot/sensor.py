@@ -10,6 +10,7 @@ from esphome.const import (
     DEVICE_CLASS_DURATION,
     DEVICE_CLASS_VOLTAGE,
     DEVICE_CLASS_FREQUENCY,
+    DEVICE_CLASS_CURRENT,
     STATE_CLASS_MEASUREMENT,
     UNIT_PERCENT,
     UNIT_WATT,
@@ -17,6 +18,7 @@ from esphome.const import (
     UNIT_MINUTE,
     UNIT_VOLT,
     UNIT_HERTZ,
+    UNIT_AMPERE,
 )
 from . import fbot_ns, Fbot, CONF_FBOT_ID
 
@@ -44,6 +46,7 @@ CONF_USB_C1_POWER = "usb_c1_power"
 CONF_USB_C2_POWER = "usb_c2_power"
 CONF_USB_C3_POWER = "usb_c3_power"
 CONF_USB_C4_POWER = "usb_c4_power"
+CONF_MAX_CHARGING_CURRENT = "max_charging_current"
 
 CONFIG_SCHEMA = cv.Schema(
     {
@@ -115,6 +118,12 @@ CONFIG_SCHEMA = cv.Schema(
         ),
         cv.Optional(CONF_THRESHOLD_DISCHARGE): sensor.sensor_schema(
             unit_of_measurement=UNIT_PERCENT,
+            accuracy_decimals=0,
+            state_class=STATE_CLASS_MEASUREMENT,
+        ),
+        cv.Optional(CONF_MAX_CHARGING_CURRENT): sensor.sensor_schema(
+            unit_of_measurement=UNIT_AMPERE,
+            device_class=DEVICE_CLASS_CURRENT,
             accuracy_decimals=0,
             state_class=STATE_CLASS_MEASUREMENT,
         ),
@@ -237,6 +246,10 @@ async def to_code(config):
     if CONF_THRESHOLD_DISCHARGE in config:
         sens = await sensor.new_sensor(config[CONF_THRESHOLD_DISCHARGE])
         cg.add(parent.set_threshold_discharge_sensor(sens))
+
+    if CONF_MAX_CHARGING_CURRENT in config:
+        sens = await sensor.new_sensor(config[CONF_MAX_CHARGING_CURRENT])
+        cg.add(parent.set_max_charging_current_sensor(sens))
 
     if CONF_CHARGE_LEVEL in config:
         sens = await sensor.new_sensor(config[CONF_CHARGE_LEVEL])

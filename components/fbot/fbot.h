@@ -43,6 +43,10 @@ static const uint8_t REG_AC_SILENT_CONTROL = 57;
 static const uint8_t REG_THRESHOLD_DISCHARGE = 66;
 static const uint8_t REG_THRESHOLD_CHARGE = 67;
 static const uint8_t REG_AC_CHARGE_LIMIT = 13;
+// SETTINGS (holding) bank register 20: AC max charging current in amperes (1-20).
+// NOTE: SETTINGS bank (fn 0x03 read / 0x06 write). The INPUT bank (fn 0x04)
+// register 20 is unrelated (total power). Same number, different bank.
+static const uint8_t REG_MAX_CHARGING_CURRENT = 20;
 
 // State flag bit masks for register 41
 static const uint16_t STATE_USB_BIT = 512;   // bit 9
@@ -78,6 +82,7 @@ class Fbot : public esphome::ble_client::BLEClientNode, public Component {
   void set_total_power_sensor(sensor::Sensor *sensor) { this->total_power_sensor_ = sensor; }
   void set_remaining_time_sensor(sensor::Sensor *sensor) { this->remaining_time_sensor_ = sensor; }
   void set_threshold_charge_sensor(sensor::Sensor *sensor) { this->threshold_charge_sensor_ = sensor; }
+  void set_max_charging_current_sensor(sensor::Sensor *sensor) { this->max_charging_current_sensor_ = sensor; }
   void set_threshold_discharge_sensor(sensor::Sensor *sensor) { this->threshold_discharge_sensor_ = sensor; }
   void set_charge_level_sensor(sensor::Sensor *sensor) { this->charge_level_sensor_ = sensor; }
   void set_ac_out_voltage_sensor(sensor::Sensor *sensor) { this->ac_out_voltage_sensor_ = sensor; }
@@ -191,6 +196,7 @@ class Fbot : public esphome::ble_client::BLEClientNode, public Component {
   sensor::Sensor *remaining_time_sensor_{nullptr};
   sensor::Sensor *threshold_charge_sensor_{nullptr};
   sensor::Sensor *threshold_discharge_sensor_{nullptr};
+  sensor::Sensor *max_charging_current_sensor_{nullptr};
   sensor::Sensor *charge_level_sensor_{nullptr};
   sensor::Sensor *ac_out_voltage_sensor_{nullptr};
   sensor::Sensor *ac_out_frequency_sensor_{nullptr};

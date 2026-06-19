@@ -540,7 +540,14 @@ void Fbot::parse_settings_notification(const uint8_t *data, uint16_t length) {
   if (this->threshold_charge_sensor_ != nullptr) {
     this->threshold_charge_sensor_->publish_state(threshold_charge);
   }
-  
+
+  // SETTINGS bank register 20: AC max charging current (amperes). Read-only for
+  // now (verification). Raw value, no scaling (1-20 A per reverse engineering).
+  uint16_t max_charging_current = this->get_register(data, length, REG_MAX_CHARGING_CURRENT);
+  if (this->max_charging_current_sensor_ != nullptr) {
+    this->max_charging_current_sensor_->publish_state(max_charging_current);
+  }
+
 #ifdef USE_NUMBER
   // Publish threshold number values (user-adjustable controls)
   if (this->threshold_discharge_number_ != nullptr) {
